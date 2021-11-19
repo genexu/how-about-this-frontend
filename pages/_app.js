@@ -1,3 +1,4 @@
+import ThemeProvider from '@/components/ThemeProvider';
 import '../styles/globals.css';
 
 if (process.env.NODE_ENV === 'development') {
@@ -5,7 +6,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  return (
+    <ThemeProvider>
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
 }
 
 export default MyApp;
