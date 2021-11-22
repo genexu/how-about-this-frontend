@@ -29,6 +29,16 @@ pipeline {
         /*     } */
         /* } */
 
+        stage('Prepare') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'ENV_LOCAL_FILE', variable: 'ENV_LOCAL_FILE')]) {
+                        writeFile file: '.env.local', text: readFile(ENV_LOCAL_FILE)
+                    } 
+                }
+            }
+        }
+
         stage('Build Image') {
             steps {
                 script {
