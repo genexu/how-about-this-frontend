@@ -1,7 +1,8 @@
 import Head from 'next/head';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import styles from '@/styles/Layout.module.css';
 
 const Layout = ({ children }) => (
   <>
@@ -11,7 +12,8 @@ const Layout = ({ children }) => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <Header />
-    <main className={styles.main}>{children}</main>
+    <CssBaseline />
+    <Container maxWidth="xl">{children}</Container>
     <Footer />
   </>
 );
