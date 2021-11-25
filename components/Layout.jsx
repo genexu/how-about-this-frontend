@@ -22,7 +22,6 @@ const Layout = ({ children }) => (
     <StyledContainer component="main" maxWidth="xl">
       {children}
     </StyledContainer>
-    <Footer />
   </>
 );
 
