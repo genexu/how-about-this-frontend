@@ -19,7 +19,7 @@ const Layout = ({ children }) => (
     </Head>
     <Header />
     <CssBaseline />
-    <StyledContainer component="main" maxWidth="xl">
+    <StyledContainer component="main" maxWidth="lg">
       {children}
     </StyledContainer>
   </>
