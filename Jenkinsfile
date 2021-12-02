@@ -39,9 +39,43 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build Image: Development') {
+            when {
+                allOf {
+                    not { branch "master" }
+                    not { tag "release-*" }
+                }
+            }
+
+            environment {
+                NODE_ENV = "development"
+            }
+
             steps {
                 script {
+                    echo "NODE_ENV: ${NODE_ENV}"
+                    withCredentials([string(credentialsId: 'GCP_WORKSPACE_PROJECT_ID', variable: 'GCP_WORKSPACE_PROJECT_ID')]) { //set SECRET with the credential content
+                        docker_image = docker.build("$GCP_WORKSPACE_PROJECT_ID/$APP_NAME")
+                    }
+                }
+            }
+        }
+
+        stage('Build Image: Production') {
+            when {
+                anyOf {
+                    branch "master"
+                    tag "release-*"
+                }
+            }
+
+            environment {
+                NODE_ENV = "production"
+            }
+
+            steps {
+                script {
+                    echo "NODE_ENV: ${NODE_ENV}"
                     withCredentials([string(credentialsId: 'GCP_WORKSPACE_PROJECT_ID', variable: 'GCP_WORKSPACE_PROJECT_ID')]) { //set SECRET with the credential content
                         docker_image = docker.build("$GCP_WORKSPACE_PROJECT_ID/$APP_NAME")
                     }
