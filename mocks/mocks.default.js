@@ -22,4 +22,28 @@ export const rests = {
       },
     },
   },
+  communities: {
+    path: 'https://api.domain.com/api/communities',
+    delay: 1000,
+    data: [
+      {
+        key: 'programing',
+        name: 'Programing',
+      },
+      {
+        key: 'memes',
+        name: 'Memes',
+      },
+      {
+        key: 'data-structure',
+        name: 'Data Structure',
+      },
+    ],
+    errors: {
+      500: {
+        code: 'ERROR-500',
+        message: 'Service not available right now.',
+      },
+    },
+  },
 };
