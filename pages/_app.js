@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import ThemeProvider from '@/components/ThemeProvider';
+import AuthProvider from '@/containers/AuthProvider';
 import '../styles/globals.css';
 
 if (process.env.NODE_ENV === 'development') {
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -1,8 +1,13 @@
+import { useContext } from 'react';
+import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { AuthContext, actions as authActions } from '@/containers/AuthProvider';
+import { auth } from '@/api/auth';
 
 const modalBoxStyle = {
   position: 'absolute',
@@ -20,35 +25,62 @@ const submitButtonStyle = {
   marginTop: 1,
 };
 
-const LoginModal = ({ open, onClose }) => (
-  <Modal open={open} onClose={onClose} aria-labelledby="modal-login-title">
-    <Box sx={modalBoxStyle}>
-      <Typography id="modal-login-title" variant="h6" component="h2">
-        Login
-      </Typography>
-      <form>
-        <TextField
-          label="Account"
-          variant="outlined"
-          size="small"
-          margin="dense"
-          fullWidth
-          required
-        />
-        <TextField
-          label="Password"
-          variant="outlined"
-          size="small"
-          margin="dense"
-          fullWidth
-          required
-        />
-        <Button sx={submitButtonStyle} type="submit" variant="contained" fullWidth>
+const LoginModal = ({ open, onClose }) => {
+  const { state, dispatch } = useContext(AuthContext);
+  const { register, handleSubmit } = useForm();
+
+  const { mutateAsync } = useMutation(
+    async ({ account, password }) => {
+      const res = await auth({ account, password });
+      return res.data;
+    },
+    {
+      onSuccess: (data) => {
+        dispatch({
+          type: authActions.SET_AUTH_DATA,
+          payload: { token: data.token, expiresAt: data.expires_at },
+        });
+      },
+    },
+  );
+
+  const onSubmit = async (data) => {
+    const { account, password } = data;
+    await mutateAsync({ account, password });
+  };
+
+  return (
+    <Modal open={open} onClose={onClose} aria-labelledby="modal-login-title">
+      <Box sx={modalBoxStyle}>
+        <Typography id="modal-login-title" variant="h6" component="h2">
           Login
-        </Button>
-      </form>
-    </Box>
-  </Modal>
-);
+        </Typography>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            {...register('account')}
+            label="Account"
+            variant="outlined"
+            size="small"
+            margin="dense"
+            fullWidth
+            required
+          />
+          <TextField
+            {...register('password')}
+            label="Password"
+            variant="outlined"
+            size="small"
+            margin="dense"
+            fullWidth
+            required
+          />
+          <Button sx={submitButtonStyle} type="submit" variant="contained" fullWidth>
+            Login
+          </Button>
+        </form>
+      </Box>
+    </Modal>
+  );
+};
 
 export default LoginModal;
