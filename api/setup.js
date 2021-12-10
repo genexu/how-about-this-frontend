@@ -8,3 +8,11 @@ export const apiInstance = axios.create({
     'content-type': 'application/json',
   },
 });
+
+export const setAuthToken = ({ token }) => {
+  apiInstance.interceptors.request.use((config) => {
+    config.headers.authorization = `Bearer ${token}`;
+    config.withCredentials = true;
+    return config;
+  });
+};

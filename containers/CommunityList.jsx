@@ -34,7 +34,7 @@ const CommunityListItemSkeleton = () => (
 
 const CommunityList = () => {
   const { data: communities } = useQuery('communities', async () => {
-    const res = await getCommunities;
+    const res = await getCommunities();
     return res.data;
   });
 

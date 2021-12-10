@@ -27,9 +27,17 @@ export const rests = {
   auth: {
     method: 'post',
     path: `${baseURL}/auth`,
+    delay: 1000,
     data: {
       token: 'JWT_TOKEN',
       expires_at: 9999999999,
+    },
+  },
+  userMe: {
+    path: `${baseURL}/users/me`,
+    data: {
+      account: 'genexu@email.com',
+      username: 'Gene Xu',
     },
   },
   communities: {

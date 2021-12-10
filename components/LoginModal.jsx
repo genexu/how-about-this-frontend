@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 import { AuthContext, actions as authActions } from '@/containers/AuthProvider';
 import { auth } from '@/api/auth';
 
@@ -26,10 +27,10 @@ const submitButtonStyle = {
 };
 
 const LoginModal = ({ open, onClose }) => {
-  const { state, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
   const { register, handleSubmit } = useForm();
 
-  const { mutateAsync } = useMutation(
+  const { isLoading, mutateAsync } = useMutation(
     async ({ account, password }) => {
       const res = await auth({ account, password });
       return res.data;
@@ -40,6 +41,8 @@ const LoginModal = ({ open, onClose }) => {
           type: authActions.SET_AUTH_DATA,
           payload: { token: data.token, expiresAt: data.expires_at },
         });
+
+        onClose();
       },
     },
   );
@@ -74,9 +77,16 @@ const LoginModal = ({ open, onClose }) => {
             fullWidth
             required
           />
-          <Button sx={submitButtonStyle} type="submit" variant="contained" fullWidth>
+          <Button
+            sx={submitButtonStyle}
+            type="submit"
+            variant="contained"
+            disabled={isLoading}
+            fullWidth
+          >
             Login
           </Button>
+          {isLoading && <LinearProgress />}
         </form>
       </Box>
     </Modal>

@@ -5,7 +5,9 @@
       "@/api/*": ["api/*"],
       "@/components/*": ["components/*"],
       "@/containers/*": ["containers/*"],
-      "@/styles/*": ["styles/*"]
+      "@/styles/*": ["styles/*"],
+      "@/utils/*": ["utils/*"],
+      "@/hooks/*": ["hooks/*"]
     }
   }
 }

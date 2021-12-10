@@ -8,6 +8,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@casl/ability": "^5.4.3",
+    "@casl/react": "^2.3.0",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.1.1",

@@ -1,4 +1,8 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
+import { useAbility } from '@casl/react';
+import { AbilityContext, updateAbilityByAuthToken, updateAbilityByUser } from '@/utils/ability';
+import { setAuthToken } from '@/api/setup';
+import { useUserMe } from '@/hooks/queries/user';
 
 export const AuthContext = createContext();
 
@@ -15,6 +19,8 @@ const reducer = (state, action) => {
   switch (action.type) {
     case actions.SET_AUTH_DATA:
       const { token, expiresAt } = action.payload;
+      setAuthToken({ token });
+
       return {
         ...state,
         token,
@@ -28,6 +34,20 @@ const reducer = (state, action) => {
 
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initState);
+  const ability = useAbility(AbilityContext);
+
+  const { token } = state;
+  const { data: user } = useUserMe();
+
+  useEffect(() => {
+    if (!token) return;
+    updateAbilityByAuthToken(ability, token);
+  }, [token]);
+
+  useEffect(() => {
+    if (!user) return;
+    updateAbilityByUser(ability, user);
+  }, [user]);
 
   return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;
 };
